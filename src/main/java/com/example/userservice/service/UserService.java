@@ -3,6 +3,8 @@ package com.example.userservice.service;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.jpa.User;
 import com.example.userservice.jpa.UserRepository;
+import com.example.userservice.vo.ResponseOrder;
+import com.example.userservice.vo.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -10,7 +12,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ public class UserService {
 
     private final UserRepository repository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public UserDto createUser(UserDto userDto) {
         userDto.setUserId(UUID.randomUUID().toString());
@@ -32,4 +38,20 @@ public class UserService {
         return mapper.map(user, UserDto.class);
     }
 
+    public UserDto getUserInfo(String userId) {
+        User user = repository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저입니다."));
+
+        UserDto userDto = new ModelMapper().map(user, UserDto.class);
+
+        List<ResponseOrder> orders = new ArrayList<>();
+        userDto.setOrders(orders);
+
+        return userDto;
+    }
+
+    public List<ResponseUser> getAllUserInfo() {
+        return repository.findAll().stream()
+            .map(user -> modelMapper.map(user, ResponseUser.class))
+            .collect(Collectors.toList());
+    }
 }
