@@ -38,15 +38,15 @@ public class UserService {
         return mapper.map(user, UserDto.class);
     }
 
-    public UserDto getUserInfo(String userId) {
+    public ResponseUser getUserInfo(String userId) {
         User user = repository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저입니다."));
 
-        UserDto userDto = new ModelMapper().map(user, UserDto.class);
+        final ResponseUser responseUser = modelMapper.map(user, ResponseUser.class);
 
         List<ResponseOrder> orders = new ArrayList<>();
-        userDto.setOrders(orders);
+        responseUser.setOrders(orders);
 
-        return userDto;
+        return responseUser;
     }
 
     public List<ResponseUser> getAllUserInfo() {

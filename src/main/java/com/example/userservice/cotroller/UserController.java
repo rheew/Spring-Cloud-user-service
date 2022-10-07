@@ -50,7 +50,13 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<ResponseUser>> getUser() {
+    public ResponseEntity<List<ResponseUser>> getUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(service.getAllUserInfo());
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<ResponseUser> getUser(@PathVariable String userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getUserInfo(userId));
+
     }
 }
