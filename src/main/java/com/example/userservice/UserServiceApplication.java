@@ -1,6 +1,8 @@
 package com.example.userservice;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -25,5 +27,4 @@ public class UserServiceApplication {
     public ModelMapper mapper() {
         return new ModelMapper();
     }
-
 }
