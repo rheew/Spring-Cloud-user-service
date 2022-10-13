@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -66,5 +67,11 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getEncryptedPwd(),
                 true, true, true, true,
                 new ArrayList<>());
+    }
+
+    public ResponseUser getUserDetailsByEmail(String email) {
+        return repository.findByEmail(email)
+                .map(entity -> modelMapper.map(entity, ResponseUser.class))
+                .orElseThrow(() -> new IllegalStateException("존재하지 않은 이메일입니다."));
     }
 }
